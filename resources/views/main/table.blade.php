@@ -23,30 +23,36 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    @if ($users != null)
-                                        <td class="d-none d-xl-table-cell">{{ $users->id }}</td>
-                                        <td class="d-none d-xl-table-cell">{{ $users->name }}</td>
-                                        <td class="d-none d-xl-table-cell">{{ $users->email }}</td>
-                                        <td class="d-none d-xl-table-cell">{{ $users->created_at }}</td>
-                                        <td>
-                                            <span
-                                                class="badge {{ $users->group_name == 'Admin' ? 'bg-success' : 'bg-warning' }}">{{ $users->group_name }}
-                                            </span>
-                                        </td>
-                                        <td class="d-none d-xl-table-cell">
-                                            <a href="" class="btn btn-danger btn-sm">
-                                                <i class="align-middle" data-feather="trash"></i>
-                                            </a>
-                                            <a href="{{ route('form-update-user', $users->id) }}"
-                                                class="btn btn-info btn-sm">
-                                                <i class="align-middle" data-feather="edit-3"></i>
-                                            </a>
-                                        </td>
-                                    @else
+                                @if ($users != null)
+                                    @forelse ($users as $user)
+                                        <tr>
+
+                                            <td class="d-none d-xl-table-cell">{{ $user->id }}</td>
+                                            <td class="d-none d-xl-table-cell">{{ $user->name }}</td>
+                                            <td class="d-none d-xl-table-cell">{{ $user->email }}</td>
+                                            <td class="d-none d-xl-table-cell">{{ $user->created_at }}</td>
+                                            <td>
+                                                <span
+                                                    class="badge {{ $user->group_name == 'Admin' ? 'bg-success' : 'bg-warning' }}">{{ $user->group_name }}
+                                                </span>
+                                            </td>
+                                            <td class="d-none d-xl-table-cell">
+                                                <a href="" class="btn btn-danger btn-sm">
+                                                    <i class="align-middle" data-feather="trash"></i>
+                                                </a>
+                                                <a href="{{ route('form-update-user', $user->id) }}"
+                                                    class="btn btn-info btn-sm">
+                                                    <i class="align-middle" data-feather="edit-3"></i>
+                                                </a>
+                                            </td>
+
+                                        </tr>
+                                    @empty
                                         <button class="btn btn-danger" disabled>Data Kosong</button>
-                                    @endif
-                                </tr>
+                                    @endforelse
+                                @else
+                                    <button class="btn btn-danger" disabled>Data Kosong</button>
+                                @endif
                             </tbody>
                         </table>
                     </div>

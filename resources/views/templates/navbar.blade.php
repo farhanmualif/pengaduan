@@ -39,7 +39,7 @@
                 </li>
             @endif
             <li class="sidebar-item {{ Request()->segment('1') == 'table-pengaduan' ? 'active' : '' }}">
-                <a class="sidebar-link" href="{{ url('table-pengaduan') }}">
+                <a class="sidebar-link" href="{{ route('pengaduan.create') }}">
                     <i class="align-middle" data-feather="table"></i> <span class="align-middle">Data
                         Pengaduan</span>
                 </a>

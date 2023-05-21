@@ -16,7 +16,19 @@ return new class extends Migration
         Schema::create('pengaduan', function (Blueprint $table) {
             $table->id();
             $table->string('judul_pengaduan');
+            $table->string('tempat_kejadian');
+            $table->string('kronologi_kejadian');
             $table->timestamp('tanggal_kejadian');
+            $table->string('foto_kejadian');
+            $table->timestamps();
+        });
+
+        Schema::create('pengaduan_users', function (Blueprint $table) {
+            $table->unsignedBigInteger('users_id');
+            $table->unsignedBigInteger('pengaduan_id');
+
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('pengaduan_id')->references('id')->on('pengaduan')->onDelete('cascade');
         });
     }
 
@@ -27,6 +39,12 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('pengaduan_users', function (Blueprint $table) {
+            $table->dropForeign(['users_id']);
+            $table->dropForeign(['pengaduan_id']);
+        });
+
+        Schema::dropIfExists('pengaduan');
+        Schema::dropIfExists('pengaduan_users');
     }
 };

@@ -46,7 +46,7 @@
                                     @if ($errors->any())
                                         <button class="btn btn-danger" disabled="">
                                             @foreach ($errors->all() as $err)
-                                                {{ $err }}
+                                                {{ $err }}</br>
                                             @endforeach
                                         </button>
                                     @endif

@@ -22,7 +22,6 @@ class AdminController extends Controller
     {
         //get posts
         $users = User::tableAdmin();
-
         return view('main.table', compact('users'));
     }
     public function tableUser()

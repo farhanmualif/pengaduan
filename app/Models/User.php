@@ -55,18 +55,19 @@ class User extends Authenticatable
             ->select('users.*', 'groups.name as group_name')
             ->where('groups.name', '=', 'User')
             ->get();
-        return $data[0] ?? null;
+        return $data ?? null;
     }
 
     public static function tableAdmin()
     {
         $data = DB::table('users')
+            ->from('users')
             ->join('groups_users', 'groups_users.user_id', '=', 'users.id')
             ->join('groups', 'groups.id', '=', 'groups_users.group_id')
             ->select('users.id', 'users.name', 'users.email', 'users.created_at', 'groups.name as group_name')
             ->where('groups.name', '=', 'Admin')
-            ->get()[0];
-        return $data;
+            ->get();
+        return $data ?? null;
     }
 
     public static function tableAllUser()

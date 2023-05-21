@@ -10,11 +10,31 @@
                             <div class="text-center">
                                 <h1 class="h2">Form Pengaduan</h1>
                             </div>
-                            <form action="post-pengaduan" method="POST">
+
+                            @if ($errors->any())
+                                <button class="btn btn-danger" disabled="">
+                                    @foreach ($errors->all() as $err)
+                                        {{ $err }}
+                                    @endforeach
+                                </button>
+                            @endif
+
+                            @if (session('failed'))
+                                <button class="btn btn-danger" disabled="">
+                                    {{ session('failed') }}
+                                </button>
+                            @endif
+
+                            <form action="{{ route('pengaduan.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Judul pengaduan</label>
-                                    <input class="form-control form-control-lg" type="text" name="judul"
+                                    <input class="form-control form-control-lg" type="text" name="judul_pengaduan"
+                                        placeholder="Masukan judul pengaduan" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tempat kejadian</label>
+                                    <input class="form-control form-control-lg" type="text" name="tempat_kejadian"
                                         placeholder="Masukan judul kejadian" />
                                 </div>
                                 <div class="mb-3">
@@ -29,14 +49,13 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Foto kejadian</label>
-                                    <input class="form-control form-control-lg" type="file" name="foto_kejadian "
-                                        placeholder="Enter your password" />
+                                    <label for="formFileSm" class="form-label">Small file input example</label>
+                                    <input class="form-control form-control-sm" id="formFileSm" type="file"
+                                        name="file">
                                 </div>
 
                                 <div class="text-center mt-3">
-                                    <a href="index.html" class="btn btn-lg btn-primary">kirim</a>
-                                    <!-- <button type="submit" class="btn btn-lg btn-primary">Sign in</button> -->
+                                    <button type="submit" class="btn btn-lg btn-primary">kirim</button>
                                 </div>
                             </form>
                         </div>
