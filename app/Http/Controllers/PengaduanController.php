@@ -11,7 +11,8 @@ class PengaduanController extends Controller
 
     public function store(Request $request)
     {
-
+        $file = $request->file('foto_kejadian');
+        dd($file);
         $this->validate(
             $request,
             [
@@ -31,12 +32,11 @@ class PengaduanController extends Controller
         );
         // getfile
         $file = $request->file('foto_kejadian');
-
-        if ($file != null) {
+        if (!$file) {
+            $file_name = 'default.png';
+        } else {
             $file_name = $file->hashName();
             $file->storeAs('public/foto-laporan', $file_name);
-        } else {
-            $file_name = 'default.png';
         }
 
         $data = [
