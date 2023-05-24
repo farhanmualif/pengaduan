@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [AuthController::class, 'formRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register');
-    Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
+    Route::get('/', [AuthController::class, 'formLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    // Route::get('/', function () {
+    //     return view('welcome');
+    // });
 });
 
 Route::middleware(['auth'])->group(function () {

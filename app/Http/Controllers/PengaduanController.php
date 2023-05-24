@@ -120,19 +120,20 @@ class PengaduanController extends Controller
     }
     public function formPengaduan()
     {
-        $data = [
+        $datas = [
             'title'=>'Form Pengaduan'
         ];
-        return view('main.formPengaduan',compact('data'));
+        return view('main.formPengaduan',compact('datas'));
     }
     public function formUpdatePengaduan($id)
     {
 
         $pengaduan = PengaduanModel::find($id);
+
         $datas = [
             'title' => 'Form Update Data Pengaduan',
             'pengaduan' => $pengaduan,
         ];
-        return view('main.formPengaduan',compact('datas'));
+        return view('main.formUpdatePengaduan',compact('datas'));
     }
 }
