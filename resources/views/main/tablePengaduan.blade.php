@@ -39,15 +39,25 @@
                                                 class="rounded mx-auto d-block" alt="foto-kejadian" style="height: 100px">
                                         </td>
                                         <td class="d-none d-md-table-cell">
-                                            <a href="" class="btn btn-danger btn">
-                                                <i class="align-middle" data-feather="trash"></i>
-                                            </a>
-                                            <a href="" class="btn btn-info btn">
+                                            <a href="{{ route('form-update-pengaduan', $data->id) }}" class="btn btn-info btn">
                                                 <i class="align-middle" data-feather="edit-3"></i>
                                             </a>
                                         </td>
+                                        <td>
+                                            <form onsubmit="deleteAlert()" action="{{ route('pengaduan.destroy', $data->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" value="{{ $data->id }}" name="id_hidden">
+                                                <button type="submit" class="btn btn-danger btn">
+                                                    <i class="align-middle" data-feather="trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 @empty
+                                    <button class="btn btn-danger" disabled="">
+                                        Tidak ada data
+                                    </button>
                                 @endforelse
 
                             </tbody>
@@ -58,4 +68,10 @@
 
         </div>
     </main>
+    <script>
+        function deleteAlert() {
+            const confirm = confirm('yakin ingin mengapus data? ')
+            if (confirm) return true else false
+        }
+    </script>
 @endsection

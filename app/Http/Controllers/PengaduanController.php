@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\PengaduanModel;
 use App\Models\PengaduanUsersModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PengaduanController extends Controller
 {
 
     public function store(Request $request)
     {
-        $file = $request->file('foto_kejadian');
-        dd($file);
         $this->validate(
             $request,
             [
@@ -31,7 +30,7 @@ class PengaduanController extends Controller
             ]
         );
         // getfile
-        $file = $request->file('foto_kejadian');
+        $file = $request->file('file');
         if (!$file) {
             $file_name = 'default.png';
         } else {
@@ -46,18 +45,20 @@ class PengaduanController extends Controller
             'tanggal_kejadian' => $request->tanggal_kejadian,
             'foto_kejadian' => $file_name,
         ];
-        $insert = PengaduanModel::create($data);
 
-        $data_pengaduan_user = [
-            'users_id' => auth()->user()->id,
-            'pengaduan_id' => $insert->id
-        ];
-
-        $insert_to_pengaduan_user = PengaduanUsersModel::create($data_pengaduan_user);
-
-        if ($insert && $insert_to_pengaduan_user) {
+        DB::beginTransaction();
+        try {
+            $insert = PengaduanModel::create($data);
+            $data_pengaduan_user = [
+                'users_id' => auth()->user()->id,
+                'pengaduan_id' => $insert->id,
+            ];
+            PengaduanUsersModel::create($data_pengaduan_user);
+            DB::commit();
             return redirect()->route('pengaduan.create')->with('success', 'berhasil menambah laporan');
-        } else {
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
             return redirect()->back()->with('failed', 'gagal menambah data');
         }
     }
@@ -68,14 +69,46 @@ class PengaduanController extends Controller
         return view('main.tablePengaduan', compact('datas'));
     }
 
-    public function formEdit()
-    {
-        # code...
-    }
-
     public function destroy($id)
     {
-        # code...
+        $data = PengaduanModel::find($id);
+        if($data->id != null){
+            PengaduanModel::destroy($data->id);
+            return redirect()->back()->with('success','berhasil menghapus data');
+        } else{
+            return redirect()->back()->with('error','Data tidak ditemukan');
+        };
+    }
+
+    public function update(Request $request, $id)
+    {
+        dd($request->all());
+        $this->validate(
+            $request,
+            [
+                'judul_pengaduan' => 'required',
+                'tanggal_kejadian' => 'required',
+                'tempat_kejadian' => 'required',
+                'kronologi_kejadian' => 'required',
+                'foto_kejadian' => 'image|mimes:jpeg,jpg,png,GIF,gif|max:2048'
+            ],
+            [
+                'judul_pengaduan.required' => 'Judul Pengaduan wajib diisi',
+                'tanggal_kejadian.required' => 'Tanggal Kejadian wajib diisi',
+                'tempat_kejadian_kejadian.required' => 'Tempat Kejadian wajib diisi',
+                'kronologi_kejadian.required' => 'Kronologi Kejadian wajib diisi',
+                'foto_kejadian.image' => 'Foto Kejadian harus berformat gambar',
+            ]
+        );
+
+
+        $file = $request->file('file');
+        if (!$file) {
+            $file_name = 'default.png';
+        } else {
+            $file_name = $file->hashName();
+            $file->storeAs('public/foto-laporan', $file_name);
+        }
     }
 
     public function tablePengaduan()
@@ -87,6 +120,19 @@ class PengaduanController extends Controller
     }
     public function formPengaduan()
     {
-        return view('main.formPengaduan');
+        $data = [
+            'title'=>'Form Pengaduan'
+        ];
+        return view('main.formPengaduan',compact('data'));
+    }
+    public function formUpdatePengaduan($id)
+    {
+
+        $pengaduan = PengaduanModel::find($id);
+        $datas = [
+            'title' => 'Form Update Data Pengaduan',
+            'pengaduan' => $pengaduan,
+        ];
+        return view('main.formPengaduan',compact('datas'));
     }
 }

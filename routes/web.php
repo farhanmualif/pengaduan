@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/table-user', [AdminController::class, 'tableUser'])->name('table-user');
     Route::get('/table-pengaduan', [PengaduanController::class, 'tablePengaduan'])->name('table-pengaduan');
     Route::get('/form-pengaduan', [PengaduanController::class, 'formPengaduan'])->name('form-pengaduan');
-
+    Route::get('/form-update-pengaduan/{id}', [PengaduanController::class, 'formUpdatePengaduan'])->name('form-update-pengaduan');
     Route::resource('pengaduan', PengaduanController::class);
 });
 
