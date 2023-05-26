@@ -19,6 +19,12 @@
                                 </button>
                             @endif
 
+                            @if (session('success'))
+                                <button class="btn btn-success" disabled="">
+                                    {{ session('success') }}
+                                </button>
+                            @endif
+
                             @if (session('failed'))
                                 <button class="btn btn-danger" disabled="">
                                     {{ session('failed') }}
@@ -26,12 +32,12 @@
                             @endif
 
                             @foreach ([$datas['pengaduan']] as $data )
-                            <form action="{{ route('pengaduan.store', $data->id) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('pengaduan.edit', $data->id) }}" method="PUT" enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="container my-5">
                                     <div class="text-center">
-                                        <img src="{{ asset('storage/foto-laporan/'.$data->foto_kejadian) }}" class="rounded" alt="..." id="image_click">
+                                        <img src="{{ asset('storage/foto-laporan/'.$data->foto_kejadian) }}" class="rounded" alt="..." id="image_click" style="width: 300px">
                                         <p class="my-3">Klik Untuk Ubah gambar</p>
                                     </div>
                                 </div>

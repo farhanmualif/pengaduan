@@ -32,6 +32,7 @@ class AuthController extends Controller
 
 
         if (Auth::attempt($datauser)) {
+            $request->session()->regenerate();
             return redirect()->to('/index');
         } else {
             return redirect()->back()->with('failed', 'gagal melakukan login');
@@ -85,9 +86,12 @@ class AuthController extends Controller
         };
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->to('/login');
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect()->to('/');
     }
 }

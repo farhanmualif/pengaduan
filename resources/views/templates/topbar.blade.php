@@ -95,7 +95,11 @@
                                 <a class="dropdown-item" href="#"><i class="align-middle me-1"
                                         data-feather="help-circle"></i> Help Center</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('logout') }}">Log out</a>
+
+                                <form action="{{ url('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item" ">Log out</button>
+                                </form>
                             </div>
                         </li>
                     </ul>

@@ -22,15 +22,12 @@ Route::group(['middleware' => 'guest'], function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::get('/', [AuthController::class, 'formLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
-    // Route::get('/', function () {
-    //     return view('welcome');
-    // });
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/index', [AdminController::class, 'index'])->name('index');
     Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/table-user', [AdminController::class, 'tableUser'])->name('table-user');
     Route::get('/table-pengaduan', [PengaduanController::class, 'tablePengaduan'])->name('table-pengaduan');
     Route::get('/form-pengaduan', [PengaduanController::class, 'formPengaduan'])->name('form-pengaduan');
