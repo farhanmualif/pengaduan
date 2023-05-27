@@ -52,3 +52,14 @@ if (!function_exists('getAllUsersAndRoles')) {
         return $getAll;
     }
 }
+if (!function_exists('getUsersWithRole')) {
+    function getUsersWithRole($roleName)
+    {
+        $getAll = DB::table('users')
+        ->join('groups_users', 'groups_users.user_id', '=', 'users.id')
+        ->join('groups', 'groups.id', '=', 'groups_users.group_id')
+        ->select('users.*', 'groups.name as group_name')->where('groups.name','=',$roleName)
+        ->get()[0];
+    return $getAll;
+    }
+}

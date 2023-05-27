@@ -38,20 +38,28 @@
                                             <img src="{{ asset('/storage/foto-laporan/' . $data->foto_kejadian) }}"
                                                 class="rounded mx-auto d-block" alt="foto-kejadian" style="height: 100px">
                                         </td>
-                                        <td class="d-none d-md-table-cell">
-                                            <a href="{{ route('form-update-pengaduan', $data->id) }}" class="btn btn-info btn">
-                                                <i class="align-middle" data-feather="edit-3"></i>
-                                            </a>
-                                        </td>
+                                        @if (hasRole() == 'User')
+                                            <td class="d-none d-md-table-cell">
+                                                <a href="{{ route('pengaduan.edit', $data->id) }}" class="btn btn-info btn">
+                                                    <i class="align-middle" data-feather="edit-3"></i>
+                                                </a>
+                                            </td>
+                                        @elseif (hasRole() == 'Admin')
+                                            <td class="d-none d-md-table-cell">
+                                                <a href="{{ url('tanggapi-pengaduan', $data->id) }}" class="btn btn-info btn">
+                                                    <i class="align-middle" data-feather="edit-3"></i>
+                                                </a>
+                                            </td>
+                                        @endif
+
                                         <td>
-                                            <form onsubmit="deleteAlert()" action="{{ route('pengaduan.destroy', $data->id) }}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input type="hidden" value="{{ $data->id }}" name="id_hidden">
-                                                <button type="submit" class="btn btn-danger btn">
-                                                    <i class="align-middle" data-feather="trash"></i>
-                                                </button>
-                                            </form>
+                                                <form onsubmit="return confirm('ingin menghapus data? {{ $data->judul_pengaduan }}')" action="{{ route('pengaduan.destroy', $data->id) }}" method="post" >
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn">
+                                                        <i class="align-middle" data-feather="trash"></i>
+                                                    </button>
+                                                </form>
                                         </td>
                                     </tr>
                                 @empty
@@ -68,10 +76,4 @@
 
         </div>
     </main>
-    <script>
-        function deleteAlert() {
-            const confirm = confirm('yakin ingin mengapus data? ')
-            if (confirm) return true else false
-        }
-    </script>
 @endsection

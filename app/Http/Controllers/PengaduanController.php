@@ -6,7 +6,7 @@ use App\Models\PengaduanModel;
 use App\Models\PengaduanUsersModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Spatie\Backtrace\File;
+use Illuminate\Support\Facades\Storage;
 
 class PengaduanController extends Controller
 {
@@ -56,12 +56,18 @@ class PengaduanController extends Controller
             ];
             PengaduanUsersModel::create($data_pengaduan_user);
             DB::commit();
-            return redirect()->route('pengaduan.create')->with('success', 'berhasil menambah laporan');
+            return redirect()->route('pengaduan.show',auth()->user()->id)->with('success', 'berhasil menambah laporan');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
             return redirect()->back()->with('failed', 'gagal menambah data');
         }
+    }
+
+    public function show($id)
+    {
+        $datas = DB::table('users')->join('pengaduan_users','users.id','=','pengaduan_users.users_id')->join('pengaduan','pengaduan_users.pengaduan_id','=','pengaduan.id')->where('users.id','=', $id)->get();
+        return view('main.tablePengaduan', compact('datas'));
     }
 
     public function create()
@@ -81,17 +87,29 @@ class PengaduanController extends Controller
         };
     }
 
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
-        $data = PengaduanModel::find($id);
+        $pengaduan = PengaduanModel::find($id);
+
+        $datas = [
+            'title' => 'Form Update Data Pengaduan',
+            'pengaduan' => $pengaduan,
+        ];
+        return view('main.formUpdatePengaduan',compact('datas'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $pengaduan = PengaduanModel::findOrfail($id);
+
         if($request->tanggal_kejadian == null){
-            $tanggal_kejadian = $data->tanggal_kejadian;
+            $tanggal_kejadian = $pengaduan->tanggal_kejadian;
         } else {
             $tanggal_kejadian = $request->tanggal_kejadian;
         };
 
         if($request->kronologi_kejadian == null){
-            $kronologi_kejadian = $data->kronologi_kejadian;
+            $kronologi_kejadian = $pengaduan->kronologi_kejadian;
         } else {
             $kronologi_kejadian = $request->kronologi_kejadian;
         };
@@ -108,9 +126,21 @@ class PengaduanController extends Controller
             ]
         );
 
-        $pengaduan = PengaduanModel::findOrfail($id);
         if (!$pengaduan) {
             return redirect()->back()->with('failed', 'gagal mengupdate data');
+        }
+
+        // jika user upload gambar
+        if ($request->hasFile('foto_kejadian')) {
+            // ambil foto baru
+            $file = $request->file('foto_kejadian');
+            $file_name = $file->hashName();
+            $file->store('public/foto-laporan/');
+            // delete foto lama
+            if ($pengaduan->foto_kejadian != 'default.png') {
+                Storage::delete('public/foto-laporan/'. $pengaduan->foto_kejadian);
+            }
+
         }
         try {
             $pengaduan->update([
@@ -118,7 +148,9 @@ class PengaduanController extends Controller
                 'tanggal_kejadian' => $tanggal_kejadian,
                 'tempat_kejadian' => $request->tempat_kejadian,
                 'kronologi_kejadian' => $kronologi_kejadian,
+                'foto_kejadian' => $file_name
             ]);
+            DB::commit();
             return redirect()->back()->with('success', 'berhasil update data');
         } catch (\Throwable $th) {
             return redirect()->back()->with('failed', 'terdapat kesalahan'.$th);
@@ -140,15 +172,9 @@ class PengaduanController extends Controller
         ];
         return view('main.formPengaduan',compact('datas'));
     }
-    public function formUpdatePengaduan($id)
+
+    public function formTanggapiPengaduan($id)
     {
-
-        $pengaduan = PengaduanModel::find($id);
-
-        $datas = [
-            'title' => 'Form Update Data Pengaduan',
-            'pengaduan' => $pengaduan,
-        ];
-        return view('main.formUpdatePengaduan',compact('datas'));
+        # code...
     }
 }

@@ -18,16 +18,12 @@ class AdminController extends Controller
     {
         return view('main.profile');
     }
-    public function tableAdmin()
+    public function show($role)
     {
-        //get posts
-        $users = User::tableAdmin();
-        return view('main.table', compact('users'));
-    }
-    public function tableUser()
-    {
-        $users = User::tableUser();
-        return view('main.table', compact('users'));
+        $datas = [
+            'datas' => getUsersWithRole($role),
+        ];
+        return view('main.tableUser', compact('datas'));
     }
 
     public function formUpdateUser($id)

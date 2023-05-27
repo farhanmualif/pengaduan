@@ -2,8 +2,10 @@
 @section('content')
     <main class="content">
         <div class="container-fluid p-0">
-
             <div class="row">
+                <p>
+                    {{ Request::segment('1').' / '.Request::segment('3').' / '.Request::segment('2') }}
+                </p>
                 <div class="card">
                     <div class="card-body">
                         <div class="m-sm-4">
@@ -32,8 +34,9 @@
                             @endif
 
                             @foreach ([$datas['pengaduan']] as $data )
-                            <form action="{{ route('pengaduan.edit', $data->id) }}" method="PUT" enctype="multipart/form-data">
+                            <form action="{{ route('pengaduan.update', $data->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
+                                @method('PUT')
 
                                 <div class="container my-5">
                                     <div class="text-center">
@@ -43,7 +46,7 @@
                                 </div>
 
                                 <div class="mb-3" style="width: 50%">
-                                    <input class="form-control form-control-sm" type="file" name="file" id="input_file_hidden" hidden/>
+                                    <input class="form-control form-control-sm" type="file" name="foto_kejadian" id="input_file_hidden" hidden/>
                                 </div>
 
                                 <div class="mb-3">
@@ -79,8 +82,6 @@
                                     <textarea class="form-control" rows="4" placeholder="Textarea" name="kronologi_kejadian"
                                         placeholder="Jabarkan kejadian"></textarea>
                                 </div>
-
-
 
                                 <div class="text-center mt-3">
                                     <button type="submit" class="btn btn-lg btn-primary">kirim</button>

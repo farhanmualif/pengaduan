@@ -25,18 +25,21 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/index', [AdminController::class, 'index'])->name('index');
+    Route::resource('user', AdminController::class);
+    Route::get('/home', [AdminController::class, 'index']);
     Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/table-user', [AdminController::class, 'tableUser'])->name('table-user');
     Route::get('/table-pengaduan', [PengaduanController::class, 'tablePengaduan'])->name('table-pengaduan');
     Route::get('/form-pengaduan', [PengaduanController::class, 'formPengaduan'])->name('form-pengaduan');
     Route::get('/form-update-pengaduan/{id}', [PengaduanController::class, 'formUpdatePengaduan'])->name('form-update-pengaduan');
+
     Route::resource('pengaduan', PengaduanController::class);
 });
 
 Route::middleware(['auth', 'user-access:Admin'])->group(function () {
     Route::get('/form-update-user/{id}', [AdminController::class, 'formUpdateUser'])->name('form-update-user');
+    Route::get('/tanggapi-pengaduan/{id}', [PengaduanController::class, 'formTanggapiPengaduan'])->name('form-update-user');
     Route::post('/update/{id}', [AdminController::class, 'update'])->name('update');
-    Route::get('/table-admin', [AdminController::class, 'tableAdmin'])->name('table-admin');
+    Route::get('/table-admin', [AdminController::class, 'table'])->name('table-admin');
 });

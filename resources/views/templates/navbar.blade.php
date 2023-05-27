@@ -9,8 +9,8 @@
                 Pages
             </li>
 
-            <li class="sidebar-item {{ Request()->segment('1') == 'index' ? 'active' : '' }}">
-                <a class="sidebar-link" href="{{ url('/index') }}">
+            <li class="sidebar-item {{ Request()->segment('1') == 'home' ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ url('/home') }}">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                 </a>
             </li>
@@ -22,32 +22,31 @@
             </li>
             @if (hasRole() == 'Admin')
                 <li class="sidebar-item {{ Request()->segment('1') == 'table-admin' ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ url('table-admin') }}">
+                    <a class="sidebar-link" href="{{ route('user.show', 'Admin') }}">
                         <i class="align-middle" data-feather="users"></i> <span class="align-middle">Data Admin</span>
                     </a>
                 </li>
                 <li class="sidebar-item {{ Request()->segment('1') == 'table-user' ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ url('table-user') }}">
+                    <a class="sidebar-link" href="{{ route('user.show', 'User') }}">
                         <i class="align-middle" data-feather="users"></i> <span class="align-middle">Data User</span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{ Request()->segment('1') == 'pengaduan' ? 'active' : '' }}">
+                    <a class="sidebar-link" href="{{ route('pengaduan.create') }}">
+                        <i class="align-middle" data-feather="table"></i> <span class="align-middle">Semua Data
+                            Pengaduan</span>
                     </a>
                 </li>
             @elseif (hasRole() == 'User')
                 <li class="sidebar-item {{ Request()->segment('1') == 'table-user' ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ url('table-user') }}">
+                    <a class="sidebar-link" href="{{ route('user.show', 'User') }}">
                         <i class="align-middle" data-feather="users"></i> <span class="align-middle">Data User</span>
                     </a>
                 </li>
             @endif
-            <li class="sidebar-item {{ Request()->segment('1') == 'table-pengaduan' ? 'active' : '' }}">
-                <a class="sidebar-link" href="{{ route('pengaduan.create') }}">
-                    <i class="align-middle" data-feather="table"></i> <span class="align-middle">Data
-                        Pengaduan</span>
-                </a>
-            </li>
-
 
             <li class="sidebar-header">
-                Tools & Components
+                Pengaduan
             </li>
 
             @if (hasRole() == 'User')
@@ -57,7 +56,14 @@
                             Pengaduan</span>
                     </a>
                 </li>
+                <li class="sidebar-item {{ Request()->segment('1') == 'pengaduan' ? 'active' : '' }}">
+                    <a class="sidebar-link" href="{{ route('pengaduan.show', auth()->user()->id) }}">
+                        <i class="align-middle" data-feather="table"></i> <span class="align-middle">Data
+                            Pengaduan Saya</span>
+                    </a>
+                </li>
             @endif
+
 
 
         </ul>

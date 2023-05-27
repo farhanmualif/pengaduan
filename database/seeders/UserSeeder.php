@@ -19,15 +19,16 @@ class UserSeeder extends Seeder
 
         $datas = [
             [
+                'name' => 'admin',
+                'email' => 'admin@mail.com',
+                'password' => Hash::make('123456'),
+            ],
+            [
                 'name' => 'user',
                 'email' => 'user@mail.com',
                 'password' => Hash::make('123456'),
             ],
-            [
-                'name' => 'admin',
-                'email' => 'admin@mail.com',
-                'password' => Hash::make('123456'),
-            ]
+
         ];
         foreach ($datas as $data) {
             User::create($data);
