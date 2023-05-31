@@ -23,14 +23,16 @@ class PengaduanSeeder extends Seeder
                 'tempat_kejadian' => 'Yogyakarta',
                 'kronologi_kejadian' => 'jalan ruksa kronologi',
                 'tanggal_kejadian' => Carbon::now(),
-                'foto_kejadian' => 'default.png'
+                'foto_kejadian' => 'default.png',
+                'status' => false
             ],
             [
                 'judul_pengaduan' => 'Pembunuhan',
                 'tempat_kejadian' => 'Yogyakarta',
                 'kronologi_kejadian' => 'Pembunuhan kronologi',
                 'tanggal_kejadian' => Carbon::now(),
-                'foto_kejadian' => 'default.png'
+                'foto_kejadian' => 'default.png',
+                'status' => false
             ],
         ];
         foreach ($datas as $data) {

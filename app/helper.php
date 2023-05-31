@@ -1,7 +1,7 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-
 if (!function_exists('hasRole')) {
     function hasRole()
     {
@@ -61,5 +61,24 @@ if (!function_exists('getUsersWithRole')) {
         ->select('users.*', 'groups.name as group_name')->where('groups.name','=',$roleName)
         ->get()[0];
     return $getAll;
+    }
+}
+if (!function_exists('getTime')) {
+    function getTime()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $currentHour = Carbon::now()->hour;
+
+        if ($currentHour >= 0 && $currentHour < 3) {
+            return 'Dini Hari';
+        } elseif ($currentHour >= 3 && $currentHour < 10) {
+            return 'Pagi';
+        } elseif ($currentHour >= 10 && $currentHour < 15) {
+            return 'Siang';
+        } elseif ($currentHour >= 15 && $currentHour < 20) {
+            return 'Sore';
+        } else {
+            return 'Malam';
+        }
     }
 }

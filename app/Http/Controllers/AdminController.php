@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivitiesModel;
 use App\Models\groups;
 use App\Models\groups_users;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -14,9 +16,13 @@ class AdminController extends Controller
         return view('main.main');
     }
 
-    public function profile()
+    public function profile($id)
     {
-        return view('main.profile');
+
+        $activities = DB::select('select * from activities where user_id = ?', [$id]);
+
+
+        return view('main.profile', compact('activities'));
     }
     public function show($role)
     {

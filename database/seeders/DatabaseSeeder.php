@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call(GroupsSeeder::class);
         $this->call(GoupsUsersSeeder::class);
         $this->call(PengaduanSeeder::class);
-        $this->call(TanggapiSeeder::class);
-        $this->call(TanggapiPengaduanSeeder::class);
+        // $this->call(TanggapiSeeder::class);
+        // $this->call(TanggapiPengaduanSeeder::class);
+        $this->call(PengaduanUser::class);
     }
 }

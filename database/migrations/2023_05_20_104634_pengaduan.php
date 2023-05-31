@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('kronologi_kejadian');
             $table->timestamp('tanggal_kejadian');
             $table->string('foto_kejadian');
+            $table->boolean('status');
             $table->timestamps();
         });
 

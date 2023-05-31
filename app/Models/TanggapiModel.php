@@ -13,6 +13,5 @@ class TanggapiModel extends Model
         'isi_tanggapi',
         'ditanggapi_oleh'
     ];
-
     public $timestamps = true;
 }

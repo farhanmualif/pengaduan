@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\TanggapiPengaduanModel;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TanggapiPengaduanSeeder extends Seeder

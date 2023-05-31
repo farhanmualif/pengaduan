@@ -16,7 +16,8 @@ class PengaduanModel extends Model
         'tempat_kejadian',
         'tanggal_kejadian',
         'kronologi_kejadian',
-        'foto_kejadian'
+        'foto_kejadian',
+        'status',
     ];
 
     public $timestamps = true;

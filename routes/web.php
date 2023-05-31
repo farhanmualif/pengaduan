@@ -3,7 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PengaduanController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\TanggapiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,19 +27,22 @@ Route::group(['middleware' => 'guest'], function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('user', AdminController::class);
     Route::get('/home', [AdminController::class, 'index']);
-    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+    Route::get('/profile/{id}', [AdminController::class, 'profile'])->name('profile');
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/table-user', [AdminController::class, 'tableUser'])->name('table-user');
     Route::get('/table-pengaduan', [PengaduanController::class, 'tablePengaduan'])->name('table-pengaduan');
     Route::get('/form-pengaduan', [PengaduanController::class, 'formPengaduan'])->name('form-pengaduan');
-    Route::get('/form-update-pengaduan/{id}', [PengaduanController::class, 'formUpdatePengaduan'])->name('form-update-pengaduan');
 
+    Route::get('/table-pengaduan-ditanggapi/{id}', [TanggapiController::class, 'tablePengaduanDitanggapi'])->name('table-pengaduan-ditanggapi');
+
+    Route::get('/form-update-pengaduan/{id}', [PengaduanController::class, 'formUpdatePengaduan'])->name('form-update-pengaduan');
     Route::resource('pengaduan', PengaduanController::class);
 });
 
 Route::middleware(['auth', 'user-access:Admin'])->group(function () {
     Route::get('/form-update-user/{id}', [AdminController::class, 'formUpdateUser'])->name('form-update-user');
-    Route::get('/tanggapi-pengaduan/{id}', [PengaduanController::class, 'formTanggapiPengaduan'])->name('form-update-user');
     Route::post('/update/{id}', [AdminController::class, 'update'])->name('update');
     Route::get('/table-admin', [AdminController::class, 'table'])->name('table-admin');
+    Route::resource('tanggapi', TanggapiController::class);
+    Route::get('/tanggapi-pengaduan/{id}', [TanggapiController::class, 'formTanggapiPengaduan'])->name('form-update-user');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivitiesModel;
 use App\Models\PengaduanModel;
 use App\Models\PengaduanUsersModel;
 use Illuminate\Http\Request;
@@ -37,6 +38,7 @@ class PengaduanController extends Controller
         } else {
             $file_name = $file->hashName();
             $file->storeAs('public/foto-laporan', $file_name);
+            ActivitiesModel::addActivity('uploads files');
         }
 
         $data = [
@@ -45,6 +47,7 @@ class PengaduanController extends Controller
             'kronologi_kejadian' => $request->kronologi_kejadian,
             'tanggal_kejadian' => $request->tanggal_kejadian,
             'foto_kejadian' => $file_name,
+            'status' => false,
         ];
 
         DB::beginTransaction();
@@ -56,6 +59,7 @@ class PengaduanController extends Controller
             ];
             PengaduanUsersModel::create($data_pengaduan_user);
             DB::commit();
+            ActivitiesModel::addActivity('insert table pengaduan');
             return redirect()->route('pengaduan.show',auth()->user()->id)->with('success', 'berhasil menambah laporan');
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -79,12 +83,24 @@ class PengaduanController extends Controller
     public function destroy($id)
     {
         $data = PengaduanModel::find($id);
-        if($data->id != null){
-            PengaduanModel::destroy($data->id);
-            return redirect()->back()->with('success','berhasil menghapus data');
-        } else{
-            return redirect()->back()->with('error','Data tidak ditemukan');
-        };
+        if ($data->id == null) {
+            return redirect()->back()->with('failed','gagal menemukan data');
+        }
+
+        $delete = PengaduanModel::destroy($data->id);
+        if (!$delete) {
+            return redirect()->back()->with('failed','gagal menghapus data');
+        }
+        if ($data->foto_kejadian != 'default.png') {
+            $delete_image = Storage::delete('public/foto-laporan/'.$data->foto_kejadian);
+            if (!$delete_image) {
+                return redirect()->back()->with('failed','gagal menghapus gambar');
+            }
+        }
+
+        ActivitiesModel::addActivity('delete data pengaduan');
+        return redirect()->back()->with('success','berhasil menghapus data');
+
     }
 
     public function edit($id)
@@ -130,34 +146,34 @@ class PengaduanController extends Controller
             return redirect()->back()->with('failed', 'gagal mengupdate data');
         }
 
-        // jika user upload gambar
-        if ($request->hasFile('foto_kejadian')) {
-            // ambil foto baru
+        // jika user tidak upload gambar
+        if (!$request->hasFile('foto_kejadian')) {
+            // filename default
+            $file_name = 'default.png';
+        } else {
             $file = $request->file('foto_kejadian');
             $file_name = $file->hashName();
             $file->store('public/foto-laporan/');
-            // delete foto lama
+                // delete foto lama
             if ($pengaduan->foto_kejadian != 'default.png') {
                 Storage::delete('public/foto-laporan/'. $pengaduan->foto_kejadian);
             }
-
-        }
-        try {
-            $pengaduan->update([
-                'judul_pengaduan' => $request->judul_pengaduan,
-                'tanggal_kejadian' => $tanggal_kejadian,
-                'tempat_kejadian' => $request->tempat_kejadian,
-                'kronologi_kejadian' => $kronologi_kejadian,
-                'foto_kejadian' => $file_name
-            ]);
-            DB::commit();
-            return redirect()->back()->with('success', 'berhasil update data');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('failed', 'terdapat kesalahan'.$th);
         }
 
+        $update = $pengaduan->update([
+            'judul_pengaduan' => $request->judul_pengaduan,
+            'tanggal_kejadian' => $tanggal_kejadian,
+            'tempat_kejadian' => $request->tempat_kejadian,
+            'kronologi_kejadian' => $kronologi_kejadian,
+            'foto_kejadian' => $file_name
+        ]);
+
+        if (!$update) {
+            return redirect()->back()->with('failed', 'terdapat kesalahan');
+        }
+        ActivitiesModel::addActivity('updated data pengaduan');
+        return redirect()->back()->with('success', 'berhasil update data');
     }
-
     public function tablePengaduan()
     {
         $data = [
@@ -173,8 +189,4 @@ class PengaduanController extends Controller
         return view('main.formPengaduan',compact('datas'));
     }
 
-    public function formTanggapiPengaduan($id)
-    {
-        # code...
-    }
 }

@@ -23,8 +23,13 @@
                                     <th class="d-none d-xl-table-cell">Tempat Kejadian</th>
                                     <th class="d-none d-xl-table-cell">Kronologi</th>
                                     <th>tanggal kejadian</th>
+                                    <th class="d-none d-md-table-cell">status</th>
                                     <th class="d-none d-md-table-cell">foto kejadian</th>
-                                    <th class="d-none d-md-table-cell">Aksi</th>
+                                    @if (hasRole()=='Admin')
+                                        <th class="d-none d-md-table-cell">Tanggapi</th>
+                                    @elseif (hasRole()=='User')
+                                        <th class="d-none d-md-table-cell">Aksi</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,15 +39,34 @@
                                         <td class="d-none d-xl-table-cell">{{ $data->tempat_kejadian }}</td>
                                         <td class="d-none d-xl-table-cell">{{ $data->kronologi_kejadian }}</td>
                                         <td><span class="badge bg-success">{{ $data->tanggal_kejadian }}</span></td>
+                                        <td>
+                                            @if ($data->status == false)
+                                                <span class="badge bg-danger">Belum Ditanggapi</span>
+                                            @elseif ($data->status == true)
+                                                <span class="badge bg-success">Sudah Ditanggapi</span>
+                                            @endif
+                                        </td>
                                         <td class="d-none d-md-table-cell">
                                             <img src="{{ asset('/storage/foto-laporan/' . $data->foto_kejadian) }}"
                                                 class="rounded mx-auto d-block" alt="foto-kejadian" style="height: 100px">
                                         </td>
+
                                         @if (hasRole() == 'User')
-                                            <td class="d-none d-md-table-cell">
+                                            <td class="d-none d-md-table-cell text-center mr-3">
+                                                <label class="form-label">Edit</label>
+                                                <br>
                                                 <a href="{{ route('pengaduan.edit', $data->id) }}" class="btn btn-info btn">
                                                     <i class="align-middle" data-feather="edit-3"></i>
                                                 </a>
+                                                <br>
+                                                <label class="form-label">Hapus</label>
+                                                <form onsubmit="return confirm('ingin menghapus data? {{ $data->judul_pengaduan }}')" action="{{ route('pengaduan.destroy', $data->id) }}" method="post" >
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn">
+                                                        <i class="align-middle" data-feather="trash"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         @elseif (hasRole() == 'Admin')
                                             <td class="d-none d-md-table-cell">
@@ -52,15 +76,7 @@
                                             </td>
                                         @endif
 
-                                        <td>
-                                                <form onsubmit="return confirm('ingin menghapus data? {{ $data->judul_pengaduan }}')" action="{{ route('pengaduan.destroy', $data->id) }}" method="post" >
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn">
-                                                        <i class="align-middle" data-feather="trash"></i>
-                                                    </button>
-                                                </form>
-                                        </td>
+
                                     </tr>
                                 @empty
                                     <button class="btn btn-danger" disabled="">
