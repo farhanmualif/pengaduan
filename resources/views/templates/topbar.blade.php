@@ -10,29 +10,33 @@
                                 data-bs-toggle="dropdown">
                                 <div class="position-relative">
                                     <i class="align-middle" data-feather="bell"></i>
-                                    <span class="indicator">4</span>
+                                    @if (count_notification() > 0)
+                                    <span class="indicator">{{ count_notification() }}</span>
+                                    @endif
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0"
                                 aria-labelledby="alertsDropdown">
                                 <div class="dropdown-menu-header">
-                                    4 New Notifications
+                                    {{ count_notification() }} New Notifications
                                 </div>
+                                @foreach(get_notification() as $notif)
                                 <div class="list-group">
                                     <a href="#" class="list-group-item">
                                         <div class="row g-0 align-items-center">
                                             <div class="col-2">
-                                                <i class="text-success" data-feather="user-plus"></i>
+                                                <i class="text-success" data-feather="mail"></i>
                                             </div>
                                             <div class="col-10">
-                                                <div class="text-dark">New connection</div>
-                                                <div class="text-muted small mt-1">Christina accepted your request.
+                                                <div class="text-dark">Pesan Baru</div>
+                                                <div class="text-muted small mt-1"> pengaduan anda telah ditanggapi oleh {{ $notif->ditanggapi_oleh }}
                                                 </div>
                                                 <div class="text-muted small mt-1">14h ago</div>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
+                                @endforeach
                                 <div class="dropdown-menu-footer">
                                     <a href="#" class="text-muted">Show all notifications</a>
                                 </div>
@@ -85,20 +89,18 @@
                                     alt="is name" /> <span class="text-dark">{{ auth()->user()->name }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1"
+                                <a class="dropdown-item" href="{{ url('profile/'.auth()->user()->id) }}"><i class="align-middle me-1"
                                         data-feather="user"></i> Profile</a>
                                 <a class="dropdown-item" href="#"><i class="align-middle me-1"
                                         data-feather="pie-chart"></i> {{ hasRole() }}</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="index.html"><i class="align-middle me-1"
-                                        data-feather="settings"></i> Settings & Privacy</a>
-                                <a class="dropdown-item" href="#"><i class="align-middle me-1"
-                                        data-feather="help-circle"></i> Help Center</a>
+                                <a class="dropdown-item" href="{{ url('form-update-user/'.auth()->user()->id) }}"><i class="align-middle me-1"
+                                        data-feather="edit"></i>Edit Profile</a>
                                 <div class="dropdown-divider"></div>
-
                                 <form action="{{ url('logout') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="dropdown-item" ">Log out</button>
+                                    <button type="submit" class="dropdown-item"><i class="align-middle me-1"
+                                        data-feather="log-out"></i>Log out</button>
                                 </form>
                             </div>
                         </li>

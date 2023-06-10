@@ -25,6 +25,17 @@
                                             <input class="form-control form-control-lg" type="email" name="email"
                                                 value="{{ $data->email }}" />
                                         </div>
+                                        @if (hasRole()=='User')
+                                        <div class="mb-3">
+                                            <label class="form-label">Password</label>
+                                            <input class="form-control form-control-lg" type="password" name="password1" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Input Password Sekali Lagi</label>
+                                            <input class="form-control form-control-lg" type="password" name="password2" />
+                                        </div>
+                                        @endif
+                                        @if (hasRole() == 'Admin')
                                         <div class="mb-3">
                                             <label class="form-label">Role</label>
                                             <select class="form-select mb-3" id="role" name="role">
@@ -37,6 +48,8 @@
                                                 @endforelse
                                             </select>
                                         </div>
+                                        @endif
+
                                         <div class="text-center mt-3">
                                             <button type="submit" class="btn btn-lg btn-primary">update</button>
                                         </div>

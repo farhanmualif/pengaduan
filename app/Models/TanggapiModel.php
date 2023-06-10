@@ -11,7 +11,9 @@ class TanggapiModel extends Model
     protected $table = 'tanggapi';
     protected $fillable = [
         'isi_tanggapi',
-        'ditanggapi_oleh'
+        'ditanggapi_oleh',
+        'created_at',
+        'updated_at',
     ];
     public $timestamps = true;
 }

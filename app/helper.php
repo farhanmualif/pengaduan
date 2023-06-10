@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\ActivitiesModel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 if (!function_exists('hasRole')) {
     function hasRole()
@@ -79,6 +81,21 @@ if (!function_exists('getTime')) {
             return 'Sore';
         } else {
             return 'Malam';
+        }
+    }
+
+    if (!function_exists('get_notification')) {
+        function get_notification() {
+            $data = DB::table('users')->join('pengaduan_users','pengaduan_users.users_id','=','users.id')->join('pengaduan','pengaduan_users.pengaduan_id','=','pengaduan.id')->join('tanggapi_pengaduan','tanggapi_pengaduan.pengaduan_id','=','pengaduan.id')->join('tanggapi','tanggapi.id','=','tanggapi_pengaduan.tanggapi_id')->where('users.id','=',auth()->user()->id);
+            // dd($data);
+            return $data->get();
+        }
+    }
+    if (!function_exists('count_notification')) {
+        function count_notification() {
+            $data = DB::table('users')->join('pengaduan_users','pengaduan_users.users_id','=','users.id')->join('pengaduan','pengaduan_users.pengaduan_id','=','pengaduan.id')->join('tanggapi_pengaduan','tanggapi_pengaduan.pengaduan_id','=','pengaduan.id')->join('tanggapi','tanggapi.id','=','tanggapi_pengaduan.tanggapi_id')->where('users.id','=',auth()->user()->id)->count();
+            // dd($data);
+            return $data;
         }
     }
 }

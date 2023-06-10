@@ -6,8 +6,9 @@ use App\Models\ActivitiesModel;
 use App\Models\groups;
 use App\Models\groups_users;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -18,11 +19,11 @@ class AdminController extends Controller
 
     public function profile($id)
     {
+        $activities = ActivitiesModel::find($id);
+        $ago = ActivitiesModel::find($id);
+        $time = Carbon::parse($ago->created_at);
 
-        $activities = DB::select('select * from activities where user_id = ?', [$id]);
-
-
-        return view('main.profile', compact('activities'));
+        return view('main.profile', compact('activities', 'time'));
     }
     public function show($role)
     {

@@ -3,10 +3,6 @@
 @section('content')
     <main class="content">
         <div class="container-fluid p-0">
-            <div class="mb-3">
-                <h1 class="h3 d-inline align-middle">Profile</h1>
-                <a class="badge bg-dark text-white ms-2" href="upgrade-to-pro.html"> Get more page examples </a>
-            </div>
             <div class="row">
                 <div class="col-md-4 col-xl-3">
                     <div class="card mb-3">
@@ -49,23 +45,18 @@
                         <div class="card-header">
                             <h5 class="card-title mb-0">Aktifitas</h5>
                         </div>
-                        @forelse ($activities as $data)
                             <div class="card-body h-100">
                                 <div class="d-flex align-items-start">
                                     <img src="{{ asset('storage/img/default.png') }}" width="36" height="36"
                                         class="rounded-circle me-2" alt="Vanessa Tucker" />
                                     <div class="flex-grow-1">
-                                        <small class="float-end text-navy">5m ago</small>
-                                        <strong>{{ auth()->user()->name }}</strong> melakukan <strong>{{ $data->activity_name }}</strong><br />
-                                        <small class="text-muted">{{ $data->created_at }}</small><br />
+                                        <small class="float-end text-navy">{{ $time->diffForHumans() }}</small>
+                                        <strong>{{ auth()->user()->name }}</strong> melakukan <strong>{{ $activities->activity_name }}</strong><br />
+                                        <small class="text-muted">{{ $activities->created_at }}</small><br />
                                     </div>
                                 </div>
                                 <hr />
                             </div>
-                        @empty
-
-                        @endforelse
-
                     </div>
                 </div>
             </div>

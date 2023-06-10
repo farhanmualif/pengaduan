@@ -71,9 +71,9 @@
                                             <label class="form-label">Password</label>
                                             <input class="form-control form-control-lg" type="password" name="password"
                                                 placeholder="Enter password" />
-                                            <small><a href="{{ url('login') }}">Have a account</a></small>
+                                                <div class="text-center mt-3">
+                                            <small><a href="{{ url('/') }}">Have a account</a></small>
                                         </div>
-                                        <div class="text-center mt-3">
                                             <button type="submit" class="btn btn-lg btn-primary">Register</button>
                                         </div>
                                     </form>

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +10,7 @@ class ActivitiesModel extends Model
     use HasFactory;
     use HasFactory;
     protected $table = 'activities';
-    protected $fillable = ['user_id', 'email','activity_name'];
+    protected $fillable = ['user_id', 'email','activity_name','created_at','updated_at'];
     public $timestamps = true;
 
     public static function addActivity($activity_name)

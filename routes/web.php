@@ -37,10 +37,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/form-update-pengaduan/{id}', [PengaduanController::class, 'formUpdatePengaduan'])->name('form-update-pengaduan');
     Route::resource('pengaduan', PengaduanController::class);
+    Route::get('/form-update-user/{id}', [AdminController::class, 'formUpdateUser'])->name('form-update-user');
 });
 
 Route::middleware(['auth', 'user-access:Admin'])->group(function () {
-    Route::get('/form-update-user/{id}', [AdminController::class, 'formUpdateUser'])->name('form-update-user');
     Route::post('/update/{id}', [AdminController::class, 'update'])->name('update');
     Route::get('/table-admin', [AdminController::class, 'table'])->name('table-admin');
     Route::resource('tanggapi', TanggapiController::class);
