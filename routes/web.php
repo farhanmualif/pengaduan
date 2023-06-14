@@ -28,7 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('user', AdminController::class);
     Route::get('/home', [AdminController::class, 'index']);
     Route::get('/profile/{id}', [AdminController::class, 'profile'])->name('profile');
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/table-user', [AdminController::class, 'tableUser'])->name('table-user');
     Route::get('/table-pengaduan', [PengaduanController::class, 'tablePengaduan'])->name('table-pengaduan');
     Route::get('/form-pengaduan', [PengaduanController::class, 'formPengaduan'])->name('form-pengaduan');

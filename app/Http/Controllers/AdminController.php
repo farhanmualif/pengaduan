@@ -8,6 +8,9 @@ use App\Models\groups_users;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+
 // use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -19,11 +22,11 @@ class AdminController extends Controller
 
     public function profile($id)
     {
-        $activities = ActivitiesModel::find($id);
-        $ago = ActivitiesModel::find($id);
-        $time = Carbon::parse($ago->created_at);
-
-        return view('main.profile', compact('activities', 'time'));
+        $histories = DB::table('activities')
+        ->where('user_id', auth()->user()->id)
+        ->where('crud', true)
+        ->get();
+        return view('main.profile', \compact('histories'));
     }
     public function show($role)
     {

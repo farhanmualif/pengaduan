@@ -16,8 +16,11 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('email');
-            $table->string('activity_name');
+            $table->string('name');
+            $table->string('url');
+            $table->string('method');
+            $table->string('user_agent');
+            $table->boolean('crud');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

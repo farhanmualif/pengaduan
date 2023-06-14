@@ -29,7 +29,7 @@
                                             </div>
                                             <div class="col-10">
                                                 <div class="text-dark">Pesan Baru</div>
-                                                <div class="text-muted small mt-1"> pengaduan anda telah ditanggapi oleh {{ $notif->ditanggapi_oleh }}
+                                                <div class="text-muted small mt-1"> {{ $notif->name}}
                                                 </div>
                                                 <div class="text-muted small mt-1">14h ago</div>
                                             </div>

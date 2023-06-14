@@ -38,7 +38,6 @@ class PengaduanController extends Controller
         } else {
             $file_name = $file->hashName();
             $file->storeAs('public/foto-laporan', $file_name);
-            ActivitiesModel::addActivity('uploads files');
         }
 
         $data = [
@@ -59,7 +58,7 @@ class PengaduanController extends Controller
             ];
             PengaduanUsersModel::create($data_pengaduan_user);
             DB::commit();
-            ActivitiesModel::addActivity('insert table pengaduan');
+            ActivitiesModel::addActivity('insert data pengaduan',true);
             return redirect()->route('pengaduan.show',auth()->user()->id)->with('success', 'berhasil menambah laporan');
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -88,6 +87,7 @@ class PengaduanController extends Controller
         }
 
         $delete = PengaduanModel::destroy($data->id);
+
         if (!$delete) {
             return redirect()->back()->with('failed','gagal menghapus data');
         }
@@ -97,8 +97,7 @@ class PengaduanController extends Controller
                 return redirect()->back()->with('failed','gagal menghapus gambar');
             }
         }
-
-        ActivitiesModel::addActivity('delete data pengaduan');
+        ActivitiesModel::addActivity('delete data',true);
         return redirect()->back()->with('success','berhasil menghapus data');
 
     }
@@ -171,7 +170,7 @@ class PengaduanController extends Controller
         if (!$update) {
             return redirect()->back()->with('failed', 'terdapat kesalahan');
         }
-        ActivitiesModel::addActivity('updated data pengaduan');
+        ActivitiesModel::addActivity('mengubah data',true);
         return redirect()->back()->with('success', 'berhasil update data');
     }
     public function tablePengaduan()

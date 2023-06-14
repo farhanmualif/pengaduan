@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\ActivitiesModel;
 use App\Models\groups_users;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,6 +33,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($datauser)) {
             $request->session()->regenerate();
+            ActivitiesModel::addActivity('login');
             return redirect()->to('/home');
         } else {
             return redirect()->back()->with('failed', 'gagal melakukan login');
@@ -80,21 +81,19 @@ class AuthController extends Controller
         $groups_insert = groups_users::create($groups_data);
 
         if ($groups_insert) {
+            ActivitiesModel::addActivity('create new account',true);
             return redirect()->to('/login')->with('success', 'berhasil register');
         } else {
             return redirect()->back()->with('failed', 'gagal melakukan register');
         };
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        try {
-            Auth::logout();
-            request()->session()->invalidate();
-            request()->session()->regenerateToken();
-            return redirect()->to('/');
-        } catch (\Throwable $th) {
-            return redirect()->back();
-        }
+        ActivitiesModel::addActivity('logout');
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return \redirect()->to('/');
     }
 }

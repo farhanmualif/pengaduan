@@ -87,15 +87,14 @@ if (!function_exists('getTime')) {
     if (!function_exists('get_notification')) {
         function get_notification() {
             $data = DB::table('users')->join('pengaduan_users','pengaduan_users.users_id','=','users.id')->join('pengaduan','pengaduan_users.pengaduan_id','=','pengaduan.id')->join('tanggapi_pengaduan','tanggapi_pengaduan.pengaduan_id','=','pengaduan.id')->join('tanggapi','tanggapi.id','=','tanggapi_pengaduan.tanggapi_id')->where('users.id','=',auth()->user()->id);
-            // dd($data);
             return $data->get();
         }
     }
     if (!function_exists('count_notification')) {
         function count_notification() {
             $data = DB::table('users')->join('pengaduan_users','pengaduan_users.users_id','=','users.id')->join('pengaduan','pengaduan_users.pengaduan_id','=','pengaduan.id')->join('tanggapi_pengaduan','tanggapi_pengaduan.pengaduan_id','=','pengaduan.id')->join('tanggapi','tanggapi.id','=','tanggapi_pengaduan.tanggapi_id')->where('users.id','=',auth()->user()->id)->count();
-            // dd($data);
             return $data;
         }
     }
+
 }

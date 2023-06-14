@@ -45,18 +45,22 @@
                         <div class="card-header">
                             <h5 class="card-title mb-0">Aktifitas</h5>
                         </div>
-                            <div class="card-body h-100">
-                                <div class="d-flex align-items-start">
-                                    <img src="{{ asset('storage/img/default.png') }}" width="36" height="36"
-                                        class="rounded-circle me-2" alt="Vanessa Tucker" />
-                                    <div class="flex-grow-1">
-                                        <small class="float-end text-navy">{{ $time->diffForHumans() }}</small>
-                                        <strong>{{ auth()->user()->name }}</strong> melakukan <strong>{{ $activities->activity_name }}</strong><br />
-                                        <small class="text-muted">{{ $activities->created_at }}</small><br />
-                                    </div>
+                        @foreach ($histories as $history)
+                        <div class="card-body h-100">
+                            <div class="d-flex align-items-start">
+                                <img src="{{ asset('storage/img/default.png') }}" width="36" height="36"
+                                    class="rounded-circle me-2" alt="Vanessa Tucker" />
+                                <div class="flex-grow-1">
+                                    <small class="float-end text-navy">...</small>
+                                    <strong>{{ auth()->user()->name }}</strong> melakukan <strong>{{ $history->name }}</strong><br />
+
+                                    <small class="text-muted">{{ \Carbon\Carbon::parse($history->created_at)->diffForHumans()  }}</small><br />
                                 </div>
-                                <hr />
                             </div>
+                            <hr />
+                        </div>
+                        @endforeach
+
                     </div>
                 </div>
             </div>
